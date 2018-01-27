@@ -1,0 +1,134 @@
+package com.sharma.nks.ht.daos;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.apache.log4j.Logger;
+import org.hibernate.Query;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Repository;
+
+import com.sharma.nks.ht.beans.Tutor;
+import com.sharma.nks.ht.models.BaseResponse;
+import com.sharma.nks.ht.models.CreateTutorRequest;
+import com.sharma.nks.ht.models.TutorSearchRequest;
+import com.sharma.nks.ht.models.TutorSearchResponse;
+
+@Repository(value = "tutorDB")
+public class TutorDAO implements ITutorDAO {
+
+	private Logger LOGGER = Logger.getLogger("dao");
+
+	@Autowired
+	SessionFactory sessionFactory;
+	
+
+	public BaseResponse createTutor(CreateTutorRequest createTutorRequest) {
+		// hbUtil.create(createTutorRequest.getTutor().getQualification());
+
+		Session session=sessionFactory.openSession();
+		Serializable szTutor = null;
+		BaseResponse resp = new BaseResponse();
+
+		try {
+			szTutor=session.save(createTutorRequest.getTutor());
+			
+			if (null != szTutor) {
+				resp.setResponseCode("000");
+			}
+		} catch (Exception e) {
+			LOGGER.error("TutorDAO createTutor() ----> " + e);
+		}
+
+		return resp;
+	}
+
+	public TutorSearchResponse viewAllTutors() {
+		Session session=sessionFactory.openSession();
+
+		TutorSearchResponse resp = new TutorSearchResponse();
+		Query query=session.createQuery("from Tutor");
+		
+		List<Tutor> tutorList=query.list();
+		if (null != tutorList) {
+			resp.setTutorList(tutorList);
+			resp.setResponseCode("000");
+		}
+		return resp;
+	}
+
+	public TutorSearchResponse viewTutorById(String tid) {
+
+		Session session=sessionFactory.openSession();
+
+		TutorSearchResponse resp = new TutorSearchResponse();
+		Query query=session.createQuery("from Tutor where ");
+		List<Tutor> tutorList=query.list();
+
+		if (null != tutorList) {
+			resp.setTutorList(tutorList);
+			resp.setResponseCode("000");
+		}
+		return resp;
+	}
+
+	public TutorSearchResponse findTutorByInclusiveCriteria(TutorSearchRequest searchRequest) {
+		String qry="SELECT tid FROM Tutor WHERE ";
+		TutorSearchResponse response=new TutorSearchResponse();
+		String hql=searchTutorQuery(searchRequest);
+		
+		try {
+			response.setResponseCode("000");
+		} catch (Exception e) {
+			response.setResponseCode("111");
+			LOGGER.error("TutorDAO createTutor() ----> " + e);
+		}
+		
+		
+		return response;
+	}
+	
+	private String searchTutorQuery(TutorSearchRequest req){
+		StringBuilder sb=new StringBuilder();
+		if(req.getExperience()>0){	
+			sb.append("experience<=:experience AND ");
+		}
+		if(req.getStudentsTaught()>0){
+			sb.append("studentsTaught<=:studentsTaught AND ");
+		}
+		if(null!=req.getSubjectsTaught()){
+			int i=0;
+			for(String subjectsTaught:req.getSubjectsTaught()){
+				if(i!=0){
+					sb.append(" OR ");
+				}
+				sb.append("subjectsTaught=:subjectsTaught"+i++);
+			}
+				
+		}
+		return sb.toString();
+	}
+
+	private Map<String,String> searchTutorMap(TutorSearchRequest req){
+		Map<String,String> mapReq=new HashMap<String,String>();
+		if(req.getExperience()>0){	
+			mapReq.put("experience", req.getExperience()+"");
+		}
+		if(req.getStudentsTaught()>0){
+			mapReq.put("studentsTaught", req.getStudentsTaught()+"");
+		}
+		if(null!=req.getSubjectsTaught()){
+			int i=0;
+			for(String sub:req.getSubjectsTaught()){
+				mapReq.put("subjectsTaught"+i++,sub);
+			}
+		}
+		return mapReq;
+	}
+}
