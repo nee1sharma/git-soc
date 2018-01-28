@@ -63,7 +63,7 @@ public class ProfileDAO implements IProfileDAO {
 	}
 
 	public RtrvProfileResponse viewAllProfiles(int offset) {
-		LOGGER.info("Create profile DAO -->viewAllProfiles(offset)");
+		LOGGER.info("Create profile DAO -->viewAllProfiles(offset) : "+offset);
 
 		RtrvProfileResponse resp=new RtrvProfileResponse();
 		Session session=sessionFactory.openSession();
@@ -81,7 +81,7 @@ public class ProfileDAO implements IProfileDAO {
 	}
 
 	public RtrvProfileResponse viewProfileById(String pid) {
-		LOGGER.info("Create profile DAO -->viewProfileById(pid)");
+		LOGGER.info("Create profile DAO -->viewProfileById(pid) : "+pid);
 
 		RtrvProfileResponse resp = new RtrvProfileResponse();
 		Session session=sessionFactory.openSession();
