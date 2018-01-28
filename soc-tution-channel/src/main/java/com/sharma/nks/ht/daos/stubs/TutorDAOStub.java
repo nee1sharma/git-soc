@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.apache.log4j.Logger;
 import org.springframework.stereotype.Repository;
 
 import com.sharma.nks.ht.beans.Qualification;
@@ -19,8 +20,9 @@ import com.sharma.nks.ht.models.TutorSearchResponse;
 
 @Repository("tutorStub")
 public class TutorDAOStub implements ITutorDAO{
-	
-	List<Tutor> tutors;
+	private Logger LOGGER = Logger.getLogger("dao");
+
+	private List<Tutor> tutors;
 	
 	public TutorDAOStub() {
 		tutors=new ArrayList<Tutor>();
@@ -38,7 +40,7 @@ public class TutorDAOStub implements ITutorDAO{
 
 	}
 	
-	public TutorSearchResponse viewAllTutors() {
+	public TutorSearchResponse viewAllTutors(int offset) {
 		TutorSearchResponse resp= new TutorSearchResponse();
 		
 		resp.setTutorList(tutors);

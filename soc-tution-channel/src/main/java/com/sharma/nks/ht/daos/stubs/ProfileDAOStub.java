@@ -1,7 +1,6 @@
 package com.sharma.nks.ht.daos.stubs;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -20,9 +19,14 @@ public class ProfileDAOStub implements IProfileDAO {
 	private List<Profile> profiles;
 	public ProfileDAOStub(){
 		profiles=new ArrayList<Profile>();
-		Address addr=new Address(1,"Sharma House","street num 5","BE","Hari nagar","New Delhi","Delhi","IN");
-		Profile p1=new Profile("ne1001","NKS stud",new Date(),new Date(),new Date(),"M","7896541230","nks@stud.com","studnet",addr);
+		Address addr1=new Address(1,"Sharma House","street num 5","BE","Hari nagar","New Delhi","Delhi","IN");
+		Profile p1=new Profile("ne3001","NKS stud","20-04-1992","10-09-2013","","M","7896541230","nks@stud.com",Profile.Role.STUDENT,addr1);
+		
+		Address addr2=new Address(1,"Gera House","1","A","Subhash nagar","New Delhi","Delhi","IN");
+		Profile p2=new Profile("ge2002","Gera tut","15-04-1992","10-09-2013","","F","7812141230","gera@tut.com",Profile.Role.TUTOR,addr2);
+		
 		profiles.add(p1);
+		profiles.add(p2);
 	}
 	
 	public BaseResponse createProfile(CreateProfileRequest createProfileRequest) {
@@ -34,7 +38,7 @@ public class ProfileDAOStub implements IProfileDAO {
 		return resp;
 	}
 
-	public RtrvProfileResponse viewAllProfiles() {
+	public RtrvProfileResponse viewAllProfiles(int offset) {
 		RtrvProfileResponse resp=new RtrvProfileResponse();
 		resp.setProfiles(profiles);
 		resp.setResponseCode("000");

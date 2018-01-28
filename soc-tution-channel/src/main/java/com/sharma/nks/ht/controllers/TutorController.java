@@ -31,7 +31,7 @@ public class TutorController {
 
 	@RequestMapping(value="/tutor", method=RequestMethod.POST)
 	public BaseResponse saveTutor(@RequestBody CreateTutorRequest createTutorRequest){
-		logger.debug("In TutorController.");		
+		logger.info("Create tutor : "+createTutorRequest);		
 		BaseResponse resp=null;
 		if(null!=createTutorRequest){
 			resp=tsvc.createTutor(createTutorRequest);
@@ -40,43 +40,35 @@ public class TutorController {
 	}
 	
 	@RequestMapping(value="/tutor/{id}",method=RequestMethod.GET)
-	public BaseResponse getTutorById(@PathVariable("id") String tid){
-		
-		BaseResponse resp=null;
+	public TutorSearchResponse getTutorById(@PathVariable("id") String tid){
+		logger.info("Get tutor by id : "+tid);
+		TutorSearchResponse resp=null;
 		if(null!=tid){
 			resp=tsvc.viewTutorById(tid);
 		}
 		return resp;
-		
 	}
+
 	
 	@RequestMapping(value="/tutors",method=RequestMethod.GET)
-	public BaseResponse getAllTutors(){
-		BaseResponse resp=tsvc.viewAllTutors();
+	public BaseResponse getAllTutors(@RequestParam(name="offset",required=false,defaultValue="0") int offset){
+		logger.info("Get all tutors by offset : "+offset);
+		BaseResponse resp=tsvc.viewAllTutors(offset);
 		return resp;
 	}
 	
-	@RequestMapping(value="/findTutor",method=RequestMethod.GET)
-	public TutorSearchResponse findTutorsByCriteria(@RequestParam("subjects")String subjects ){////@RequestParam("exp")int experience,
-		TutorSearchRequest tutorSearchRequest=new TutorSearchRequest();
-		//tutorSearchRequest.setExperience(experience);
-		Set<String> subjectsTaught=separateSttring(subjects);
-		tutorSearchRequest.setSubjectsTaught(subjectsTaught);
-		tutorSearchRequest.getStudentsTaught();
+	@RequestMapping(value="/findtutor",method=RequestMethod.GET)
+	public TutorSearchResponse findTutorsByCriteria(@RequestParam(name="offset",required=false,defaultValue="0") int offset,
+			@RequestBody TutorSearchRequest tutorSearchRequest){
+	
+		logger.info("Find tutors with search condition : "+tutorSearchRequest);
 		
 		TutorSearchResponse resp=tsvc.findTutorByInclusiveCriteria(tutorSearchRequest);
 		
 		return resp;
 	}
+
 	
-	private Set<String> separateSttring(String str){
-		String s[]=str.split(" ");
-		Set<String> subjectsTaught=new HashSet<String>();
-		for(String s0:s){
-			subjectsTaught.add(s0);
-		}
-		return subjectsTaught;
-	}
 	
 	
 	
@@ -86,6 +78,7 @@ public class TutorController {
 	
 	@RequestMapping(value="/tutorstub",method=RequestMethod.GET)
 	public CreateTutorRequest getStubbedTutor(){
+		
 		CreateTutorRequest req1=new CreateTutorRequest();
 		Qualification q=new Qualification("GGSIPU","IINTM","BCA","2013",72);
 		Set<Qualification> qlist=new HashSet<Qualification>();

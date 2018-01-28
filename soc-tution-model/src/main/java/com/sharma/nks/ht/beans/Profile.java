@@ -1,33 +1,74 @@
 package com.sharma.nks.ht.beans;
-import java.util.Date;
 
+import javax.persistence.Column;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.Id;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
 @Table(name="TABLE_PROFILE")
 public class Profile {
 	
+	public enum Role{
+		TUTOR(0),
+		STUDENT(1),
+		ADMIN(2);
+		
+		private int value;
+		public int getValue() {
+			return value;
+		}
+		
+		Role(int id) {	value=id;}
+		public static Role parse(int id){
+			Role role=null;
+			for(Role r:Role.values()){
+				if(r.getValue()==id){
+					role=r;
+				}
+			}
+			return role;
+		}
+	}
 	@Id
+	@Column(length=10)
 	private String userId;
+	@Column(length=25)
 	private String name;
-	private Date DOB;
-	private Date DOJ;
-	private Date lastActive;
+	@Column(length=10)
+	private String DOB;
+	@Column(length=10)
+	private String DOJ;
+	@Column(length=25)
+	private String lastActive;
+	@Column(length=1)
 	private String gender;
+	@Column(length=12)
 	private String phone;
+	@Column(length=25)
 	private String email;
-	private String role;
-	//@JoinColumn(name="id")
-	@OneToOne(fetch=FetchType.EAGER)
+	private Role role;
+
+	@Embedded
 	private Address address;
 	
 	public Profile() {	}
 	
-	public Profile(String userId,String name, Date dOB, Date dOJ, Date lastActive, String gender, String phone, String email, String role,
+	/**
+	 * 
+	 * @param userId
+	 * @param name
+	 * @param dOB
+	 * @param dOJ
+	 * @param lastActive
+	 * @param gender
+	 * @param phone
+	 * @param email
+	 * @param role
+	 * @param address
+	 */
+	public Profile(String userId,String name, String dOB, String dOJ, String lastActive, String gender, String phone, String email, Role role,
 			Address address) {
 		this.userId=userId;
 		this.name = name;
@@ -49,10 +90,10 @@ public class Profile {
 	public void setName(String name) {
 		this.name = name;
 	}
-	public Date getDOB() {
+	public String getDOB() {
 		return DOB;
 	}
-	public void setDOB(Date dOB) {
+	public void setDOB(String dOB) {
 		DOB = dOB;
 	}
 	public String getGender() {
@@ -73,22 +114,22 @@ public class Profile {
 	public void setAddress(Address address) {
 		this.address = address;
 	}
-	public String getRole() {
+	public Role getRole() {
 		return role;
 	}
-	public void setRole(String role) {
+	public void setRole(Role role) {
 		this.role = role;
 	}
-	public Date getDOJ() {
+	public String getDOJ() {
 		return DOJ;
 	}
-	public void setDOJ(Date dOJ) {
+	public void setDOJ(String dOJ) {
 		DOJ = dOJ;
 	}
-	public Date getLastActive() {
+	public String getLastActive() {
 		return lastActive;
 	}
-	public void setLastActive(Date lastActive) {
+	public void setLastActive(String lastActive) {
 		this.lastActive = lastActive;
 	}
 	public String getEmail() {
@@ -106,10 +147,9 @@ public class Profile {
 
 	@Override
 	public String toString() {
-		return "Profile {userId : " + userId + ", name : " + name + ", DOB : " + DOB + ", DOJ : " + DOJ + ", lastActive : "
-				+ lastActive + ", gender : " + gender + ", phone : " + phone + ", email : " + email + ", role : " + role
-				+ ", address : " + address + "}";
+		return "Profile {userId : " + userId + ", name : " + name + ", DOB : " + DOB + ", DOJ : " + DOJ
+				+ ", lastActive : " + lastActive + ", gender : " + gender + ", phone : " + phone + ", email : " + email
+				+ ", role : " + role + ", address : " + address + "}";
 	}
-	
-	
+
 }

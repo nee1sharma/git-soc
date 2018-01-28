@@ -24,9 +24,9 @@ public class TutorService implements ITutorService {
 	}
 
 	@Override
-	public TutorSearchResponse viewAllTutors() {
+	public TutorSearchResponse viewAllTutors(int offset) {
 		// TODO Auto-generated method stub
-		return tdao.viewAllTutors();
+		return tdao.viewAllTutors(offset);
 	}
 
 	@Override
@@ -40,5 +40,4 @@ public class TutorService implements ITutorService {
 		// TODO Auto-generated method stub
 		return tdao.findTutorByInclusiveCriteria(tutorSearchRequest);
 	}
-
 }

@@ -1,24 +1,40 @@
 package com.sharma.nks.ht.beans;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Embeddable;
 
-@Entity
-@Table(name="TABLE_ADDRESS")
+@Embeddable
 public class Address {
-	@Id
-	@GeneratedValue
-	private int id;
+
 	private int floor;
+	@Column(name="housename",length=25)
 	private String houseName;
+	@Column(length=25)
 	private String street;
+	@Column(length=15)
 	private String block;
+	@Column(length=25)
 	private String locality;
+	@Column(length=25)
 	private String city;
+	@Column(length=25)
 	private String state;
+	@Column(length=15)
 	private String country;
 	
 	public Address() {	}
 	
+	/**
+	 * 
+	 * @param floor
+	 * @param houseName
+	 * @param street
+	 * @param block
+	 * @param locality
+	 * @param city
+	 * @param state
+	 * @param country
+	 */
 	public Address(int floor, String houseName, String street, String block, String locality, String city,
 			String state, String country) {
 		this.floor = floor;
@@ -78,12 +94,6 @@ public class Address {
 	}
 	public void setCountry(String country) {
 		this.country = country;
-	}
-	public int getId() {
-		return id;
-	}
-	public void setId(int id) {
-		this.id = id;
 	}
 
 	@Override

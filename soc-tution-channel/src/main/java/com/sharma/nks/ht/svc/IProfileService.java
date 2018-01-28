@@ -22,7 +22,7 @@ public interface IProfileService {
 	 * List of all Profiles
 	 * @return List of Profiles
 	 */
-	public RtrvProfileResponse viewAllProfiles();
+	public RtrvProfileResponse viewAllProfiles(int offset);
 	
 	
 	/**

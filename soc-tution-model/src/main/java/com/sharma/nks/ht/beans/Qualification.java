@@ -9,21 +9,32 @@ import javax.persistence.*;
  * stream : BCA, BBA, MBA, CA
  * college : IITM, IIT
  */
-//@Entity
-//@Table(name="Qualification_SET")
+
 @Embeddable
 public class Qualification {
 
-	//@Id
 	private String qid;
+	@Column(name="percentage", length=2)
 	private int overAllPercentage;
+	@Column(name="passoutyear", length=4)
 	private String passoutYear;
+	@Column(name="majorstream", length=20)
 	private String stream;
+	@Column(length=50)
 	private String college;
+	@Column(length=50)
 	private String university;
 	
 	public Qualification(){}
 	
+	/**
+	 * 
+	 * @param university
+	 * @param college
+	 * @param stream
+	 * @param passoutYear
+	 * @param overAllPercentage
+	 */
 	public Qualification(String university, String college, String stream, String passoutYear, int overAllPercentage) {
 		this.university = university;
 		this.college = college;

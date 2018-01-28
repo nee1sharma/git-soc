@@ -12,7 +12,7 @@ import com.sharma.nks.ht.models.RtrvProfileResponse;
 @Service
 public class ProfileService implements IProfileService {
 
-	@Autowired @Qualifier("profileStub") //profileDB  or profileStub
+	@Autowired @Qualifier("profileDB") //profileDB  or profileStub
 	IProfileDAO pdao;
 	
 	@Override
@@ -23,9 +23,9 @@ public class ProfileService implements IProfileService {
 	}
 
 	@Override
-	public RtrvProfileResponse viewAllProfiles() {
+	public RtrvProfileResponse viewAllProfiles(int offset) {
 		// TODO Auto-generated method stub
-		return pdao.viewAllProfiles();
+		return pdao.viewAllProfiles(offset);
 	}
 
 	@Override

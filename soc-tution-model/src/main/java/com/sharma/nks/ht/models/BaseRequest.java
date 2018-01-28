@@ -4,13 +4,13 @@ import java.util.Map;
 
 public class BaseRequest {
 	
-	private Map<Object,Object> extension;
+	private Map<String,String> extension;
 
-	public Map<Object, Object> getExtension() {
+	public Map<String, String> getExtension() {
 		return extension;
 	}
 
-	public void setExtension(Map<Object, Object> extension) {
+	public void setExtension(Map<String, String> extension) {
 		this.extension = extension;
 	}
 

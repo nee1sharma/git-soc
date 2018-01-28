@@ -14,11 +14,11 @@ public class Tutor {
 	private int studentsTaught;
 	
 	@ElementCollection(fetch=FetchType.EAGER) //@OneToMany(fetch=FetchType.EAGER,cascade=CascadeType.ALL)
-	@CollectionTable(name="qualification_set")//, joinColumns=@JoinColumn(name="tid"))
+	@CollectionTable(name="qualification_set", joinColumns=@JoinColumn(name="tid"))
 	private Set<Qualification> qualification=new HashSet<Qualification>();
 	
 	@ElementCollection(fetch=FetchType.EAGER)
-	@CollectionTable(name="subjectsTaught_set",joinColumns=@JoinColumn(name="tid"))
+	@CollectionTable(name="subjects_set",joinColumns=@JoinColumn(name="tid"))
 	private Set<String> subjectsTaught=new HashSet<String>();
 	
 

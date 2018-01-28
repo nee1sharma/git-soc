@@ -10,15 +10,13 @@ public class Credential {
 	@Id
 	private String userId;
 	private String password;
-	private String role;
 	private boolean isLoggedIn;
 	
 	public Credential(){}
-	public Credential(String userId, String password, String role, boolean isLoggedIn) {
+	public Credential(String userId, String password, boolean isLoggedIn) {
 		super();
 		this.userId = userId;
 		this.password = password;
-		this.role = role;
 		this.isLoggedIn = isLoggedIn;
 	}
 	public String getUserId() {
@@ -33,12 +31,6 @@ public class Credential {
 	public void setPassword(String password) {
 		this.password = password;
 	}
-	public String getRole() {
-		return role;
-	}
-	public void setRole(String role) {
-		this.role = role;
-	}
 	public boolean isLoggedIn() {
 		return isLoggedIn;
 	}
@@ -47,8 +39,29 @@ public class Credential {
 	}
 	
 	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Credential other = (Credential) obj;
+		if (password == null) {
+			if (other.password != null)
+				return false;
+		} else if (!password.equals(other.password))
+			return false;
+		if (userId == null) {
+			if (other.userId != null)
+				return false;
+		} else if (!userId.equalsIgnoreCase(other.userId))
+			return false;
+		return true;
+	}
+	@Override
 	public String toString() {
-		return "Credential {userId : " + userId + ", password : " + password + ", role : " + role + ", isLoggedIn : "
+		return "Credential {userId : " + userId + ", password : " + password + ", isLoggedIn : "
 				+ isLoggedIn + "}";
 	}
 	

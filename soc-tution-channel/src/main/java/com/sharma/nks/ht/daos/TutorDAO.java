@@ -1,7 +1,6 @@
 package com.sharma.nks.ht.daos;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -11,7 +10,6 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 
 import com.sharma.nks.ht.beans.Tutor;
@@ -24,14 +22,16 @@ import com.sharma.nks.ht.models.TutorSearchResponse;
 public class TutorDAO implements ITutorDAO {
 
 	private Logger LOGGER = Logger.getLogger("dao");
+	private final int MAX_SIZE=5;
+
 
 	@Autowired
 	SessionFactory sessionFactory;
 	
 
 	public BaseResponse createTutor(CreateTutorRequest createTutorRequest) {
-		// hbUtil.create(createTutorRequest.getTutor().getQualification());
-
+		LOGGER.info("TutorDAO --> createTutor(createTutorRequest)"+createTutorRequest);
+		
 		Session session=sessionFactory.openSession();
 		Serializable szTutor = null;
 		BaseResponse resp = new BaseResponse();
@@ -41,6 +41,10 @@ public class TutorDAO implements ITutorDAO {
 			
 			if (null != szTutor) {
 				resp.setResponseCode("000");
+				Map<String, String> extension=new HashMap<>();
+				extension.put("tid", szTutor.toString());
+				resp.setExtension(extension);
+				LOGGER.info("Tutor created with id: "+szTutor.toString());
 			}
 		} catch (Exception e) {
 			LOGGER.error("TutorDAO createTutor() ----> " + e);
@@ -49,30 +53,30 @@ public class TutorDAO implements ITutorDAO {
 		return resp;
 	}
 
-	public TutorSearchResponse viewAllTutors() {
+	public TutorSearchResponse viewAllTutors(int offset) {
+		LOGGER.info("TutorDAO --> viewAllTutors with offset : "+offset);
 		Session session=sessionFactory.openSession();
 
 		TutorSearchResponse resp = new TutorSearchResponse();
-		Query query=session.createQuery("from Tutor");
+		Query query=session.createQuery("from Tutor").setFirstResult(offset*MAX_SIZE).setMaxResults(offset);
 		
 		List<Tutor> tutorList=query.list();
 		if (null != tutorList) {
 			resp.setTutorList(tutorList);
 			resp.setResponseCode("000");
+			LOGGER.info("Records found.");
 		}
 		return resp;
 	}
 
 	public TutorSearchResponse viewTutorById(String tid) {
+		LOGGER.info("TutorDAO --> viewTutorById with tid : "+tid);
 
 		Session session=sessionFactory.openSession();
-
 		TutorSearchResponse resp = new TutorSearchResponse();
-		Query query=session.createQuery("from Tutor where ");
-		List<Tutor> tutorList=query.list();
+		Tutor tutor=(Tutor) session.get(tid,Tutor.class);
 
-		if (null != tutorList) {
-			resp.setTutorList(tutorList);
+		if (null != tutor) {
 			resp.setResponseCode("000");
 		}
 		return resp;
@@ -87,7 +91,7 @@ public class TutorDAO implements ITutorDAO {
 			response.setResponseCode("000");
 		} catch (Exception e) {
 			response.setResponseCode("111");
-			LOGGER.error("TutorDAO createTutor() ----> " + e);
+			LOGGER.error("TutorDAO findTutorByInclusiveCriteria() ----> " + e);
 		}
 		
 		
@@ -102,15 +106,12 @@ public class TutorDAO implements ITutorDAO {
 		if(req.getStudentsTaught()>0){
 			sb.append("studentsTaught<=:studentsTaught AND ");
 		}
-		if(null!=req.getSubjectsTaught()){
-			int i=0;
-			for(String subjectsTaught:req.getSubjectsTaught()){
-				if(i!=0){
-					sb.append(" OR ");
-				}
-				sb.append("subjectsTaught=:subjectsTaught"+i++);
+		int subs=req.getSubjectsTaught().size();
+		for(int i=0;i<subs;i++){
+			if(i!=0){
+				sb.append(" OR ");
 			}
-				
+			sb.append("subjectsTaught=:subjectsTaught"+i++);
 		}
 		return sb.toString();
 	}

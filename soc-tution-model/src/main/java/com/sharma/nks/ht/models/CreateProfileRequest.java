@@ -12,7 +12,10 @@ public class CreateProfileRequest {
 	public void setProfile(Profile profile) {
 		this.profile = profile;
 	}
-	
-	
 
+	@Override
+	public String toString() {
+		return "CreateProfileRequest {profile : " + profile + "}";
+	}
+	
 }

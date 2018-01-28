@@ -18,7 +18,7 @@ public interface ITutorDAO {
 	 * List of all Tutors
 	 * @return List of Tutors
 	 */
-	public TutorSearchResponse viewAllTutors();
+	public TutorSearchResponse viewAllTutors(int offset);
 	
 	
 	/**
